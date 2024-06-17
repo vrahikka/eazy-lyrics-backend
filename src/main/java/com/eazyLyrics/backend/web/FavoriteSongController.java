@@ -5,10 +5,12 @@ import com.eazyLyrics.backend.favoriteSong.FavoriteSong;
 import com.eazyLyrics.backend.favoriteSong.FavoriteSongService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/favorite-song")
 public class FavoriteSongController {
 
     private final FavoriteSongService service;
@@ -18,16 +20,17 @@ public class FavoriteSongController {
     }
 
 
-    @PostMapping("/api/favorite-song")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public FavoriteSong create(@RequestBody CreateFavoriteSongDTO input) {
+    public FavoriteSong create(@RequestBody CreateFavoriteSongDTO input, UriComponentsBuilder ucb) {
         System.out.println("POST /api/favorite-song: " + input);
         return service.create(input);
     }
 
-    @GetMapping("/api/favorite-song")
+    @GetMapping
     public List<FavoriteSong> getAll() {
         var favorites = service.getAll();
+
         System.out.println("GET /api/favorite-song: Favorite songs sent " + favorites.size());
         return  service.getAll();
     }

@@ -1,0 +1,1 @@
+INSERT INTO todo_item (id, song_id, email, title, artist_name, thumbnail_url) VALUES (1, 123, 'test@test.com', 'Test', 'Test Testerson', 'www.test.com');
