@@ -1,9 +1,10 @@
 package com.eazyLyrics.backend.favoriteSong;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class CreateFavoriteSongDTO {
-    @NotBlank
+    @NotNull
     private Integer songId;
     @NotBlank
     private String email;

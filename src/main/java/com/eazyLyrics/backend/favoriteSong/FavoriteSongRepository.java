@@ -35,7 +35,7 @@ public class FavoriteSongRepository {
                 .update(keyHolder);
 
         return jdbcClient.sql("""
-                SELECT id, song_id, email, title, artist_name, thumbnail_url 
+                SELECT id, song_id, email, title, artist_name, thumbnail_url
                 FROM favorite_song
                 WHERE id = :id
                 """)
