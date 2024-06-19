@@ -1,10 +1,12 @@
 package com.eazyLyrics.backend.web;
 
 import com.eazyLyrics.backend.favoriteSong.CreateFavoriteSongDTO;
+import com.eazyLyrics.backend.favoriteSong.DeleteFavoriteSongDTO;
 import com.eazyLyrics.backend.favoriteSong.FavoriteSong;
 import com.eazyLyrics.backend.favoriteSong.FavoriteSongService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -34,5 +36,12 @@ public class FavoriteSongController {
 
         System.out.println("GET /api/favorite-song: Favorite songs sent " + favorites.size());
         return  service.getAll();
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@RequestBody @Valid DeleteFavoriteSongDTO input) {
+        System.out.println("DELETE /api/favorite-song: " + input);
+        service.delete(input.getSongId(), input.getEmail());
     }
 }

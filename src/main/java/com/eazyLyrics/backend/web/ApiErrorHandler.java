@@ -1,5 +1,6 @@
 package com.eazyLyrics.backend.web;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -28,5 +29,19 @@ public class ApiErrorHandler {
         }
 
         return apiError;
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ApiErrorDTO handleSQLError(DataIntegrityViolationException ex) {
+        return new ApiErrorDTO("DATA_BASE_ERROR", ex.getCause().getMessage());
+    }
+
+    @ExceptionHandler(SongNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ApiErrorDTO handleNotFoundError(SongNotFoundException ex) {
+        return new ApiErrorDTO("NOT_FOUND", ex.getMessage());
     }
 }

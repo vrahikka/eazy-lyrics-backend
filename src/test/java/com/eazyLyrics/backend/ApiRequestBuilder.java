@@ -7,8 +7,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 public class ApiRequestBuilder {
 
@@ -28,5 +27,11 @@ public class ApiRequestBuilder {
 
     public ResultActions findAll() throws Exception {
         return mockMvc.perform(get("/api/favorite-song"));
+    }
+
+    public ResultActions deleteSong(String requestBody) throws Exception {
+        return mockMvc.perform(delete("/api/favorite-song")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody));
     }
 }

@@ -1,5 +1,6 @@
 package com.eazyLyrics.backend.web;
 
+import jakarta.annotation.Nullable;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -8,10 +9,17 @@ import java.util.List;
 public class ApiErrorDTO {
 
     private final String errorCode;
+
+    private String errorMessage;
     private final List<FieldErrorDTO> validationErrors = new ArrayList<>();
 
     public ApiErrorDTO(String errorCode) {
         this.errorCode = errorCode;
+    }
+
+    public ApiErrorDTO(String errorCode, String errorMessage) {
+        this.errorCode = errorCode;
+        this.errorMessage = errorMessage;
     }
 
     public void addFieldError(String field, String errorCode) {
@@ -21,6 +29,10 @@ public class ApiErrorDTO {
 
     public String getErrorCode() {
         return errorCode;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
     public List<FieldErrorDTO> getValidationErrors() {

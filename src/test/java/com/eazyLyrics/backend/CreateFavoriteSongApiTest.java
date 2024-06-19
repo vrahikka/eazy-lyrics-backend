@@ -68,7 +68,7 @@ class CreateFavoriteSongApiTest {
         }
 
         @Test
-        @DisplayName("Should return one validation error")
+        @DisplayName("Should return multiple validation error")
         void shouldReturnOneValidationError() throws Exception {
             apiRequestBuilder.create(REQUEST_BODY)
                     .andExpect(jsonPath("$.validationErrors", hasSize(5)));
@@ -125,7 +125,7 @@ class CreateFavoriteSongApiTest {
         }
 
         @Test
-        @DisplayName("Shouldn't insert a new todo item into the database")
+        @DisplayName("Shouldn't insert a new song into the database")
         void shouldNotInsertNewTodoItemIntoDatabase() throws Exception {
             apiRequestBuilder.create(REQUEST_BODY);
             assertThat(favoriteSongsTable).hasNumberOfRows(0);
@@ -138,7 +138,7 @@ class CreateFavoriteSongApiTest {
 
         private final String REQUEST_BODY = """
                 {
-                    "songId": "123",
+                    "songId": 123,
                     "title": "Test",
                     "email": "test@test.com",
                     "artistName": "Test Testerson",
@@ -228,6 +228,53 @@ class CreateFavoriteSongApiTest {
                     .isEqualTo("www.test.com");
 
             softAssertions.assertAll();
+        }
+    }
+
+    @Nested
+    @DisplayName("When created song already exists")
+    @Sql({
+            "/db/clean-database.sql",
+            "/db/init-favorite-songs.sql"
+    })
+    class WhenFavoriteSongAlreadyExists {
+
+        private final String REQUEST_BODY = """
+                {
+                    "songId": "123",
+                    "title": "Test",
+                    "email": "test@test.com",
+                    "artistName": "Test Testerson",
+                    "thumbnailUrl": "www.test.com"
+                }
+                """;
+
+        @Test
+        @DisplayName("Should return the HTTP status code bad request")
+        void shouldReturnHttpStatusCodeBadRequest() throws Exception {
+            apiRequestBuilder.create(REQUEST_BODY)
+                    .andExpect(status().isBadRequest());
+        }
+
+        @Test
+        @DisplayName("Should return an API error as JSON")
+        void shouldReturnAPIErrorAsJSON() throws Exception {
+            apiRequestBuilder.create(REQUEST_BODY)
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+        }
+
+        @Test
+        @DisplayName("Should return API error with correct error code")
+        void shouldReturnApiErrorWithErrorCode() throws Exception {
+            apiRequestBuilder.create(REQUEST_BODY)
+                    .andExpect(jsonPath("$.errorCode", equalTo("DATA_BASE_ERROR")));
+        }
+
+        @Test
+        @DisplayName("Should return API error with message")
+        void shouldReturnApiErrorWithErrorMessage() throws Exception {
+            apiRequestBuilder.create(REQUEST_BODY)
+                    .andExpect(jsonPath("$.errorMessage").exists());
         }
     }
 
