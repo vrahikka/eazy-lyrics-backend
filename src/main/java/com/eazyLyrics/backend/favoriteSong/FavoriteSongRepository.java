@@ -1,7 +1,5 @@
 package com.eazyLyrics.backend.favoriteSong;
 
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
@@ -13,11 +11,9 @@ import java.util.List;
 public class FavoriteSongRepository {
 
     private final JdbcClient jdbcClient;
-    private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    public FavoriteSongRepository(JdbcClient jdbcClient, NamedParameterJdbcTemplate jdbcTemplate) {
+    public FavoriteSongRepository(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
-        this.jdbcTemplate = jdbcTemplate;
     }
 
     public FavoriteSong create(CreateFavoriteSongDTO input) {
@@ -46,9 +42,8 @@ public class FavoriteSongRepository {
     }
 
     public List<FavoriteSong> getAll() {
-        return jdbcTemplate.query(
-                "SELECT id, song_id, email, title, artist_name, thumbnail_url FROM favorite_song ORDER BY artist_name ASC",
-                new BeanPropertyRowMapper(FavoriteSong.class));
+        return jdbcClient.sql(
+                "SELECT id, song_id, email, title, artist_name, thumbnail_url FROM favorite_song ORDER BY artist_name ASC").query(FavoriteSong.class).stream().toList();
     }
 
     public void delete(Integer songId, String email) {
