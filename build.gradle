@@ -9,6 +9,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
 	sourceCompatibility = '21'
+	targetCompatibility = '21'
 }
 
 repositories {
@@ -23,7 +24,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'jakarta.validation:jakarta.validation-api'
 	implementation 'org.flywaydb:flyway-core'
-	implementation 'org.projectlombok:lombok:1.18.28'
+	compileOnly 'org.projectlombok:lombok:1.18.30'
+	annotationProcessor 'org.projectlombok:lombok:1.18.30'
 	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 	runtimeOnly 'org.postgresql:postgresql'
 	runtimeOnly 'org.hibernate.validator:hibernate-validator'
