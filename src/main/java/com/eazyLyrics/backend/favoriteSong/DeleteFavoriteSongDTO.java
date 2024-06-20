@@ -2,27 +2,14 @@ package com.eazyLyrics.backend.favoriteSong;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
+@Data
 public class DeleteFavoriteSongDTO {
     @NotNull
     private Integer songId;
     @NotBlank
     private String email;
-    public Integer getSongId() {
-        return songId;
-    }
-
-    public void setSongId(Integer songId) {
-        this.songId = songId;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     @Override
     public String toString() {

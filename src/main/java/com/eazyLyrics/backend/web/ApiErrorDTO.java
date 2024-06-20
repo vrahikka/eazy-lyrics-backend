@@ -6,6 +6,7 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class ApiErrorDTO {
 
     private final String errorCode;
@@ -27,15 +28,4 @@ public class ApiErrorDTO {
         validationErrors.add(error);
     }
 
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    public List<FieldErrorDTO> getValidationErrors() {
-        return validationErrors;
-    }
 }
