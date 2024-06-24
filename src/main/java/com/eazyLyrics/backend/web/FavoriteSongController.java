@@ -6,10 +6,9 @@ import com.eazyLyrics.backend.favoriteSong.FavoriteSong;
 import com.eazyLyrics.backend.favoriteSong.FavoriteSongService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -22,26 +21,25 @@ public class FavoriteSongController {
         this.service = service;
     }
 
+    @GetMapping
+    public List<FavoriteSong> getAll(Principal principal) {
+        var favorites = service.getAll(principal.getName());
+
+        System.out.println("GET /api/favorite-song: Favorite songs sent " + favorites.size());
+        return favorites;
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public FavoriteSong create(@RequestBody @Valid CreateFavoriteSongDTO input) {
+    public FavoriteSong create(@RequestBody @Valid CreateFavoriteSongDTO input, Principal principal) {
         System.out.println("POST /api/favorite-song: " + input);
-        return service.create(input);
-    }
-
-    @GetMapping
-    public List<FavoriteSong> getAll() {
-        var favorites = service.getAll();
-
-        System.out.println("GET /api/favorite-song: Favorite songs sent " + favorites.size());
-        return  service.getAll();
+        return service.create(input, principal.getName());
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@RequestBody @Valid DeleteFavoriteSongDTO input) {
+    public void delete(@RequestBody @Valid DeleteFavoriteSongDTO input, Principal principal) {
         System.out.println("DELETE /api/favorite-song: " + input);
-        service.delete(input.getSongId(), input.getEmail());
+        service.delete(input.getSongId(), principal.getName());
     }
 }

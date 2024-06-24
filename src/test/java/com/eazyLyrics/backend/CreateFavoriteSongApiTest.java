@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Sql({
         "/db/clean-database.sql"
 })
-@WithMockUser
+@WithMockUser("test@test.com")
 class CreateFavoriteSongApiTest {
 
     private final ApiRequestBuilder apiRequestBuilder;
@@ -73,17 +73,7 @@ class CreateFavoriteSongApiTest {
         @DisplayName("Should return multiple validation error")
         void shouldReturnOneValidationError() throws Exception {
             apiRequestBuilder.create(REQUEST_BODY)
-                    .andExpect(jsonPath("$.validationErrors", hasSize(5)));
-        }
-
-        @Test
-        @DisplayName("Should return validation error about empty email")
-        void shouldReturnValidationErrorAboutEmptyEmail() throws Exception {
-            apiRequestBuilder.create(REQUEST_BODY)
-                    .andExpect(jsonPath(
-                            "$.validationErrors[?(@.field == 'email')].errorCode",
-                            contains("NotBlank")
-                    ));
+                    .andExpect(jsonPath("$.validationErrors", hasSize(4)));
         }
 
         @Test
@@ -142,7 +132,6 @@ class CreateFavoriteSongApiTest {
                 {
                     "songId": 123,
                     "title": "Test",
-                    "email": "test@test.com",
                     "artistName": "Test Testerson",
                     "thumbnailUrl": "www.test.com"
                 }

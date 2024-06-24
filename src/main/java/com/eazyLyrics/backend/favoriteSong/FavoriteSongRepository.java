@@ -16,7 +16,7 @@ public class FavoriteSongRepository {
         this.jdbcClient = jdbcClient;
     }
 
-    public FavoriteSong create(CreateFavoriteSongDTO input) {
+    public FavoriteSong create(CreateFavoriteSongDTO input, String email) {
         var keyHolder = new GeneratedKeyHolder();
         jdbcClient.sql("""
                         INSERT INTO favorite_song (song_id, email, title, artist_name, thumbnail_url)
@@ -24,7 +24,7 @@ public class FavoriteSongRepository {
                         RETURNING id
                         """)
                 .param("song_id", input.getSongId())
-                .param("email", input.getEmail())
+                .param("email", email)
                 .param("title", input.getTitle())
                 .param("artist_name", input.getArtistName())
                 .param("thumbnail_url", input.getThumbnailUrl())
@@ -41,9 +41,11 @@ public class FavoriteSongRepository {
 
     }
 
-    public List<FavoriteSong> getAll() {
+    public List<FavoriteSong> getAll(String email) {
         return jdbcClient.sql(
-                "SELECT id, song_id, email, title, artist_name, thumbnail_url FROM favorite_song ORDER BY artist_name ASC").query(FavoriteSong.class).stream().toList();
+                "SELECT id, song_id, email, title, artist_name, thumbnail_url FROM favorite_song WHERE email = :email")
+                .param("email", email)
+                .query(FavoriteSong.class).stream().toList();
     }
 
     public void delete(Integer songId, String email) {

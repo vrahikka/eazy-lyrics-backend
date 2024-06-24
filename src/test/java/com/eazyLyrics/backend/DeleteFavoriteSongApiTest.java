@@ -21,6 +21,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("integrationTest")
@@ -28,8 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         "/db/clean-database.sql",
         "/db/init-favorite-songs.sql"
 })
-@WithMockUser
+@WithMockUser("test@test.com")
 public class DeleteFavoriteSongApiTest {
+    private final Integer initialRowCount = 3;
     private final ApiRequestBuilder apiRequestBuilder;
     private final Table favoriteSongsTable;
 
@@ -45,14 +47,13 @@ public class DeleteFavoriteSongApiTest {
 
         private final String REQUEST_BODY = """
                 {
-                    "songId": 123,
-                    "email": "test@test.com"
+                    "songId": 123
                 }
                 """;
 
         @Test
-        @DisplayName("Should return the HTTP status code created")
-        void shouldReturnHttpStatusCodeCreated() throws Exception {
+        @DisplayName("Should return the HTTP status code no content")
+        void shouldReturnHttpStatusCodeNoContent() throws Exception {
             apiRequestBuilder.deleteSong(REQUEST_BODY)
                     .andExpect(status().isNoContent());
         }
@@ -61,7 +62,7 @@ public class DeleteFavoriteSongApiTest {
         @DisplayName("Should remove one item from table")
         void shouldRemoveItemFromTable() throws Exception {
             apiRequestBuilder.deleteSong(REQUEST_BODY);
-            assertThat(favoriteSongsTable).hasNumberOfRows(1);
+            assertThat(favoriteSongsTable).hasNumberOfRows(initialRowCount - 1);
         }
     }
 
@@ -71,8 +72,7 @@ public class DeleteFavoriteSongApiTest {
 
         private final String REQUEST_BODY = """
                 {
-                    "songId": 666,
-                    "email": "test@test.com"
+                    "songId": 666
                 }
                 """;
 
@@ -94,7 +94,39 @@ public class DeleteFavoriteSongApiTest {
         @DisplayName("Should not remove any items from table")
         void shouldNotRemoveItemFromTable() throws Exception {
             apiRequestBuilder.deleteSong(REQUEST_BODY);
-            assertThat(favoriteSongsTable).hasNumberOfRows(2);
+            assertThat(favoriteSongsTable).hasNumberOfRows(initialRowCount);
+        }
+    }
+
+    @Nested
+    @DisplayName("Valid input data and song exists but is for different user")
+    class WhenInputDataIsValidSongDoesExistWrongUser {
+
+        private final String REQUEST_BODY = """
+                {
+                    "songId": 456
+                }
+                """;
+
+        @Test
+        @DisplayName("Should return the HTTP status not found")
+        void shouldReturnHttpStatusCodeNotFound() throws Exception {
+            apiRequestBuilder.deleteSong(REQUEST_BODY)
+                    .andExpect(status().isNotFound());
+        }
+
+        @Test
+        @DisplayName("Should return the error message")
+        void shouldReturnErrorMessage() throws Exception {
+            apiRequestBuilder.deleteSong(REQUEST_BODY)
+                    .andExpect(jsonPath("$.errorMessage").exists());
+        }
+
+        @Test
+        @DisplayName("Should not remove any items from table")
+        void shouldNotRemoveItemFromTable() throws Exception {
+            apiRequestBuilder.deleteSong(REQUEST_BODY);
+            assertThat(favoriteSongsTable).hasNumberOfRows(initialRowCount);
         }
     }
 
@@ -129,20 +161,10 @@ public class DeleteFavoriteSongApiTest {
         }
 
         @Test
-        @DisplayName("Should return multiple validation error")
+        @DisplayName("Should return validation error")
         void shouldReturnOneValidationError() throws Exception {
             apiRequestBuilder.deleteSong(REQUEST_BODY)
-                    .andExpect(jsonPath("$.validationErrors", hasSize(2)));
-        }
-
-        @Test
-        @DisplayName("Should return validation error about empty email")
-        void shouldReturnValidationErrorAboutEmptyEmail() throws Exception {
-            apiRequestBuilder.deleteSong(REQUEST_BODY)
-                    .andExpect(jsonPath(
-                            "$.validationErrors[?(@.field == 'email')].errorCode",
-                            contains("NotBlank")
-                    ));
+                    .andExpect(jsonPath("$.validationErrors", hasSize(1)));
         }
 
         @Test
@@ -159,7 +181,7 @@ public class DeleteFavoriteSongApiTest {
         @DisplayName("Shouldn't delete a song from the database")
         void shouldNotInsertNewTodoItemIntoDatabase() throws Exception {
             apiRequestBuilder.deleteSong(REQUEST_BODY);
-            assertThat(favoriteSongsTable).hasNumberOfRows(2);
+            assertThat(favoriteSongsTable).hasNumberOfRows(initialRowCount);
         }
     }
 }

@@ -16,20 +16,19 @@ public class FavoriteSongService {
     }
 
     @Transactional
-    public FavoriteSong create(CreateFavoriteSongDTO input) {
-        return repository.create(input);
+    public FavoriteSong create(CreateFavoriteSongDTO input, String email) {
+        return repository.create(input, email);
     }
 
     @Transactional(readOnly = true)
-    public List<FavoriteSong> getAll() {
-        return repository.getAll();
+    public List<FavoriteSong> getAll(String email) {
+        return repository.getAll(email);
     }
 
     @Transactional
     public void delete(Integer songId, String email) {
-
         // Check if the song exists
-        if (getAll().stream().anyMatch(song -> song.getSongId().equals(songId) && song.getEmail().equals(email))) {
+        if (getAll(email).stream().anyMatch(song -> song.getSongId().equals(songId) && song.getEmail().equals(email))) {
             repository.delete(songId, email);
         } else {
             throw new SongNotFoundException("Song not found with id " + songId + " and email " + email);

@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("integrationTest")
-@WithMockUser
+@WithMockUser("test@test.com")
 class GetFavoriteSongApiTest {
 
     private final ApiRequestBuilder apiRequestBuilder;
@@ -91,7 +91,7 @@ class GetFavoriteSongApiTest {
         }
 
         @Test
-        @DisplayName("Should return the information of the first todo item")
+        @DisplayName("Should return the information of the first item")
         void shouldReturnInformationOfFirstTodoItem() throws Exception {
             var test = apiRequestBuilder.findAll();
             apiRequestBuilder.findAll()
@@ -100,12 +100,11 @@ class GetFavoriteSongApiTest {
         }
 
         @Test
-        @DisplayName("Should return the information of the second todo item")
+        @DisplayName("Should return the information of the second item")
         void shouldReturnInformationOfSecondTodoItem() throws Exception {
             apiRequestBuilder.findAll()
                     .andExpect(jsonPath("$[1].songId", equalTo(321)))
                     .andExpect(jsonPath("$[1].title", equalTo("Test2")));
         }
     }
-
 }

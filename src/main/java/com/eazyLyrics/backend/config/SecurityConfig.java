@@ -36,11 +36,16 @@ public class SecurityConfig {
     @Bean
     UserDetailsService testOnlyUsers(PasswordEncoder passwordEncoder) {
         User.UserBuilder users = User.builder();
-        UserDetails admin = users
-                .username("admin")
+        UserDetails testUser = users
+                .username("test@test.com")
                 .password(passwordEncoder.encode("abc123"))
                 .roles() // No roles for now
                 .build();
-        return new InMemoryUserDetailsManager(admin);
+        UserDetails testUser2 = users
+                .username("test2@test.com")
+                .password(passwordEncoder.encode("abc123"))
+                .roles() // No roles for now
+                .build();
+        return new InMemoryUserDetailsManager(testUser, testUser2);
     }
 }
