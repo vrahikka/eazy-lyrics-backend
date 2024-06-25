@@ -1,5 +1,6 @@
 package com.eazyLyrics.backend.user;
 
+import com.eazyLyrics.backend.web.SongNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,15 @@ public class UserService {
         newUser.setEmail(user.getEmail());
         newUser.setPassword(user.getPassword());
         return repository.save(newUser);
+    }
+
+    @Transactional
+    public void delete(String email) {
+        if(getAll().stream().anyMatch(user -> user.getEmail().equals(email))) {
+            repository.deleteByEmail(email);
+        } else {
+            throw new SongNotFoundException("User not found with email " + email);
+        }
     }
 
 }
