@@ -1,5 +1,6 @@
-package com.eazyLyrics.backend;
+package com.eazyLyrics.backend.favoriteSong;
 
+import com.eazyLyrics.backend.favoriteSong.FavoriteSongApiRequestBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

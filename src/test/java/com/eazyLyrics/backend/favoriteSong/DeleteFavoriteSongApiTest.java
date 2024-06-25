@@ -1,4 +1,4 @@
-package com.eazyLyrics.backend;
+package com.eazyLyrics.backend.favoriteSong;
 
 import org.assertj.db.type.Table;
 import org.junit.jupiter.api.DisplayName;

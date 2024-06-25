@@ -1,4 +1,4 @@
-package com.eazyLyrics.backend;
+package com.eazyLyrics.backend.favoriteSong;
 
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
