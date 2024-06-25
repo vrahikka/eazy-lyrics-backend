@@ -22,7 +22,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/favorite-song/**")
-                        .authenticated()
+                        .hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/users/**")
                         .hasRole("ADMIN")
                         .requestMatchers("/api/register/**")
@@ -33,23 +33,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    UserDetailsService testOnlyUsers(PasswordEncoder passwordEncoder) {
-        User.UserBuilder users = User.builder();
-        UserDetails testUser = users
-                .username("test@test.com")
-                .password(passwordEncoder.encode("abc123"))
-                .roles("ADMIN") // No roles for now
-                .build();
-        UserDetails testUser2 = users
-                .username("test2@test.com")
-                .password(passwordEncoder.encode("abc123"))
-                .roles() // No roles for now
-                .build();
-        return new InMemoryUserDetailsManager(testUser, testUser2);
     }
 }
