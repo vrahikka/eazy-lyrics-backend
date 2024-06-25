@@ -13,8 +13,14 @@ public class User {
     @GeneratedValue(
             strategy = IDENTITY
     )
-    Long id;
-    String email;
-    String password;
-    Boolean enabled = true;
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
+    private Boolean enabled = true;
 }

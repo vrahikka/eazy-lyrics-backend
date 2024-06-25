@@ -19,8 +19,8 @@ public class UserService {
     @Transactional
     public User create(CreateUserDTO user) {
         var newUser = new User();
-        newUser.email = user.getEmail();
-        newUser.password = user.getPassword();
+        newUser.setEmail(user.getEmail());
+        newUser.setPassword(user.getPassword());
         return repository.save(newUser);
     }
 

@@ -26,17 +26,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser("test@test.com")
 class GetFavoriteSongApiTest {
 
-    private final ApiRequestBuilder apiRequestBuilder;
+    private final FavoriteSongApiRequestBuilder apiRequestBuilder;
 
 
     public GetFavoriteSongApiTest(@Autowired MockMvc mockMvc) {
-        this.apiRequestBuilder = new ApiRequestBuilder(mockMvc);
+        this.apiRequestBuilder = new FavoriteSongApiRequestBuilder(mockMvc);
     }
 
     @Nested
     @DisplayName("When no todo items is found")
     @Sql({
-            "/db/clean-database.sql"
+            "/db/clean-favorite-song-database.sql"
     })
     class WhenNoItemsIsFound {
 
@@ -65,7 +65,7 @@ class GetFavoriteSongApiTest {
     @Nested
     @DisplayName("When two items are found")
     @Sql({
-            "/db/clean-database.sql",
+            "/db/clean-favorite-song-database.sql",
             "/db/init-favorite-songs.sql"
     })
     class WhenTwoItemsAreFound {

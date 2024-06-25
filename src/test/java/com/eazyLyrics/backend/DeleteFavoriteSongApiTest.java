@@ -26,18 +26,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("integrationTest")
 @Sql({
-        "/db/clean-database.sql",
+        "/db/clean-favorite-song-database.sql",
         "/db/init-favorite-songs.sql"
 })
 @WithMockUser("test@test.com")
 public class DeleteFavoriteSongApiTest {
     private final Integer initialRowCount = 3;
-    private final ApiRequestBuilder apiRequestBuilder;
+    private final FavoriteSongApiRequestBuilder apiRequestBuilder;
     private final Table favoriteSongsTable;
 
     @Autowired
     public DeleteFavoriteSongApiTest(MockMvc mockMvc, DataSource dataSource) {
-        this.apiRequestBuilder = new ApiRequestBuilder(mockMvc);
+        this.apiRequestBuilder = new FavoriteSongApiRequestBuilder(mockMvc);
         this.favoriteSongsTable = new Table(dataSource, "favorite_song");
     }
 

@@ -24,6 +24,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/favorite-song/**")
                         .authenticated()
                         .requestMatchers("/api/users/**")
+                        .hasRole("ADMIN")
+                        .requestMatchers("/api/register/**")
                         .permitAll())
                 .httpBasic(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable());
@@ -41,7 +43,7 @@ public class SecurityConfig {
         UserDetails testUser = users
                 .username("test@test.com")
                 .password(passwordEncoder.encode("abc123"))
-                .roles() // No roles for now
+                .roles("ADMIN") // No roles for now
                 .build();
         UserDetails testUser2 = users
                 .username("test2@test.com")

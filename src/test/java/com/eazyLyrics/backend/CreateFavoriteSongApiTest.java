@@ -25,17 +25,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("integrationTest")
 @Sql({
-        "/db/clean-database.sql"
+        "/db/clean-favorite-song-database.sql"
 })
-@WithMockUser("test@test.com")
+@WithMockUser(value = "test@test.com", roles = "ADMIN")
 class CreateFavoriteSongApiTest {
 
-    private final ApiRequestBuilder apiRequestBuilder;
+    private final FavoriteSongApiRequestBuilder apiRequestBuilder;
     private final Table favoriteSongsTable;
 
     @Autowired
     public CreateFavoriteSongApiTest(MockMvc mockMvc, DataSource dataSource) {
-        this.apiRequestBuilder = new ApiRequestBuilder(mockMvc);
+        this.apiRequestBuilder = new FavoriteSongApiRequestBuilder(mockMvc);
         this.favoriteSongsTable = new Table(dataSource, "favorite_song");
     }
 
@@ -225,7 +225,7 @@ class CreateFavoriteSongApiTest {
     @Nested
     @DisplayName("When created song already exists")
     @Sql({
-            "/db/clean-database.sql",
+            "/db/clean-favorite-song-database.sql",
             "/db/init-favorite-songs.sql"
     })
     class WhenFavoriteSongAlreadyExists {
