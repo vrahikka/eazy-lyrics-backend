@@ -1,6 +1,5 @@
 package com.eazyLyrics.backend.register;
 
-import org.assertj.db.api.SoftAssertions;
 import org.assertj.db.type.Table;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
@@ -122,20 +120,6 @@ class CreateUserApiTest {
                     .andExpect(status().isCreated());
         }
 
-        @Test
-        @DisplayName("Should return the information of the user as JSON")
-        void shouldReturnInformationOfCreatedUserAsJSON() throws Exception {
-            apiRequestBuilder.create(REQUEST_BODY)
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-        }
-
-        @Test
-        @DisplayName("Should return the information of the created user")
-        void shouldReturnInformationOfCreatedUser() throws Exception {
-            apiRequestBuilder.create(REQUEST_BODY)
-                    .andExpect(jsonPath("$.email", equalTo("test@test.com")))
-                    .andExpect(jsonPath("$.password", equalTo("test")));
-        }
 
         @Test
         @DisplayName("Should insert user into the users table")
@@ -155,31 +139,22 @@ class CreateUserApiTest {
         }
 
 
+
         @Test
         @DisplayName("Should insert correct item into the users table")
         void shouldInsertCorrectTodoItemIntoSongItemTable() throws Exception {
             apiRequestBuilder.create(REQUEST_BODY);
 
-            var softAssertions = new SoftAssertions();
-
-            softAssertions.assertThat(usersTable)
+            assertThat(usersTable)
                     .row(0)
                     .value("id")
                     .as("id")
                     .isEqualTo(1L);
-            softAssertions.assertThat(usersTable)
+            assertThat(usersTable)
                     .row(0)
                     .value("email")
                     .as("email")
                     .isEqualTo("test@test.com");
-            softAssertions.assertThat(usersTable)
-                    .row(0)
-                    .value("password")
-                    .as("password")
-                    .isEqualTo("test");
-
-
-            softAssertions.assertAll();
         }
     }
 

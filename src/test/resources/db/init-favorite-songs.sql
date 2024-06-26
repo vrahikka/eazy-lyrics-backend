@@ -1,3 +1,4 @@
 INSERT INTO favorite_song (id, song_id, email, title, artist_name, thumbnail_url) VALUES (1, 123, 'test@test.com', 'Test', 'Test Testerson', 'www.test.com');
 INSERT INTO favorite_song (id, song_id, email, title, artist_name, thumbnail_url) VALUES (2, 321, 'test@test.com', 'Test2', 'Test Testerson', 'www.test2.com');
 INSERT INTO favorite_song (id, song_id, email, title, artist_name, thumbnail_url) VALUES (3, 456, 'test2@test.com', 'Test3', 'Test2 Testerson', 'www.test3.com');
+INSERT INTO favorite_song (id, song_id, email, title, artist_name, thumbnail_url) VALUES (4, 123, 'test2@test.com', 'Test3', 'Test2 Testerson', 'www.test3.com');

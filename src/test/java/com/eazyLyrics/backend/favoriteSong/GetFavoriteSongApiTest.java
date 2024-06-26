@@ -24,7 +24,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("integrationTest")
-@WithMockUser("test@test.com")
 class GetFavoriteSongApiTest {
 
     private final FavoriteSongApiRequestBuilder apiRequestBuilder;
@@ -35,11 +34,12 @@ class GetFavoriteSongApiTest {
     }
 
     @Nested
-    @DisplayName("When no todo items is found")
+    @DisplayName("When no items are found")
     @Sql({
             "/db/clean-favorite-song-database.sql"
     })
-    class WhenNoItemsIsFound {
+    @WithMockUser("test@test.com")
+    class WhenNoItemsAreFound {
 
         @Test
         @DisplayName("Should return HTTP status code ok")
@@ -50,7 +50,7 @@ class GetFavoriteSongApiTest {
 
         @Test
         @DisplayName("Should return the found todo items as JSON")
-        void shouldReturnFoundTodoItemsJSON() throws Exception {
+        void shouldReturnFoundItemsJSON() throws Exception {
             apiRequestBuilder.findAll()
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
         }
@@ -69,6 +69,7 @@ class GetFavoriteSongApiTest {
             "/db/clean-favorite-song-database.sql",
             "/db/init-favorite-songs.sql"
     })
+    @WithMockUser("test@test.com")
     class WhenTwoItemsAreFound {
 
         @Test
@@ -79,7 +80,7 @@ class GetFavoriteSongApiTest {
 
         @Test
         @DisplayName("Should return the found todo items as JSON")
-        void shouldReturnFoundTodoItemsJSON() throws Exception {
+        void shouldReturnFoundItemsJSON() throws Exception {
             apiRequestBuilder.findAll()
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON));
         }

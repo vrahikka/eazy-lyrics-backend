@@ -20,11 +20,11 @@ public class UserService {
     }
 
     @Transactional
-    public User create(CreateUserDTO user) {
+    public void create(CreateUserDTO user) {
         var newUser = new User();
         newUser.setEmail(user.getEmail());
         newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        return repository.save(newUser);
+        repository.save(newUser);
     }
 
     @Transactional

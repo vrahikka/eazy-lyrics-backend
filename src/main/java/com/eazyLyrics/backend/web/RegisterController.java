@@ -18,8 +18,8 @@ public class RegisterController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(@RequestBody @Valid CreateUserDTO input) {
+    public void create(@RequestBody @Valid CreateUserDTO input) {
         System.out.println("POST /api/register: " + input);
-        return service.create(input);
+        service.create(input);
     }
 }

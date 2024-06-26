@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 })
 @WithMockUser("test@test.com")
 public class DeleteFavoriteSongApiTest {
-    private final Integer initialRowCount = 3;
+    private final Integer initialRowCount = 4;
     private final FavoriteSongApiRequestBuilder apiRequestBuilder;
     private final Table favoriteSongsTable;
 
@@ -59,7 +59,7 @@ public class DeleteFavoriteSongApiTest {
         }
 
         @Test
-        @DisplayName("Should remove one item from table")
+        @DisplayName("Should remove only one item from table")
         void shouldRemoveItemFromTable() throws Exception {
             apiRequestBuilder.deleteSong(REQUEST_BODY);
             assertThat(favoriteSongsTable).hasNumberOfRows(initialRowCount - 1);

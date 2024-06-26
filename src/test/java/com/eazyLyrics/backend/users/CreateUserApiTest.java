@@ -123,21 +123,6 @@ class CreateUserApiTest {
         }
 
         @Test
-        @DisplayName("Should return the information of the created favorite song as JSON")
-        void shouldReturnInformationOfCreatedTodoItemAsJSON() throws Exception {
-            apiRequestBuilder.create(REQUEST_BODY)
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-        }
-
-        @Test
-        @DisplayName("Should return the information of the created favorite song")
-        void shouldReturnInformationOfCreatedUserItem() throws Exception {
-            apiRequestBuilder.create(REQUEST_BODY)
-                    .andExpect(jsonPath("$.password", equalTo("123")))
-                    .andExpect(jsonPath("$.email", equalTo("test@test.com")));
-        }
-
-        @Test
         @DisplayName("Should insert one todo item into the favoriteSongs table")
         void shouldInsertOneTodoItemIntoTodoItemTable() throws Exception {
             apiRequestBuilder.create(REQUEST_BODY);
@@ -172,11 +157,6 @@ class CreateUserApiTest {
                     .value("email")
                     .as("email")
                     .isEqualTo("test@test.com");
-            softAssertions.assertThat(usersTable)
-                    .row(0)
-                    .value("password")
-                    .as("password")
-                    .isEqualTo("123");
 
             softAssertions.assertAll();
         }
